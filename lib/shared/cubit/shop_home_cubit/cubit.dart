@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hash/models/shop_app/categories_models.dart';
 import 'package:hash/models/shop_app/home_model.dart';
 import 'package:hash/modules/account/account.dart';
 import 'package:hash/modules/cart/cart.dart';
@@ -40,4 +41,25 @@ class ShopCubit extends Cubit<ShopStates> {
     });
     emit(ShopLoadingHomeDataStates());
   }
+
+
+
+
+  CategoriesModel? categoriesModel;
+
+  void getCategoriesModel() {
+    DioHelper.getData(url: GET_CATEGORIES, token: token).then((value) {
+      categoriesModel = CategoriesModel.formJson(value.data);
+      emit(ShopSuccessCategoriesStates());
+    }).catchError((error) {
+      print(error.toString());
+      emit(ShopErrorCategoriesStates());
+    });
+    emit(ShopLoadingCategoriesSStates());
+  }
+
+
+
+
+
 }

@@ -43,6 +43,11 @@ dependencies:
   conditional_builder_null_safety: ^0.0.6
   fluttertoast: ^8.2.1
   shared_preferences: ^2.1.1
+  firebase_core: ^2.14.0
+  firebase_auth: ^4.6.3
+
+
+
 
 
 dev_dependencies:

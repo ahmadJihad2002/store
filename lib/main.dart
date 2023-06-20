@@ -1,6 +1,8 @@
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hash/firebase_options.dart';
 import 'package:hash/modules/home/home.dart';
 import 'package:hash/modules/login/login.dart';
 import 'package:hash/shared/components/constanse.dart';
@@ -10,6 +12,9 @@ import 'package:hash/shared/network/local/cache_helper.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   Bloc.observer = MyBlocObserver();
   Widget widget;
  token = await CacheHelper.getData(key: 'token');
@@ -33,7 +38,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(providers: [
       BlocProvider(create: (BuildContext context) =>
       ShopCubit()
-        ..getHomeData())
+        ..getHomeData()..getCategoriesModel())
     ],
         child: BlocConsumer <ShopCubit, ShopStates>(
           listener: (context, state) {},
