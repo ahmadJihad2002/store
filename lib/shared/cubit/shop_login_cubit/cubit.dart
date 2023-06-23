@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hash/models/shop_app/login_model.dart';
@@ -38,12 +39,14 @@ class ShopLoginCubit extends Cubit<ShopLoginStates> {
     required String password,
   }) {
     emit(ShopLoginLoadingState());
+
+    // login using default API
+    /*
     DioHelper.postData(
       url: LOGIN,
       data: {'email': email, 'password': password},
     ).then((value) {
-      print('value');
-      print(value);
+
       loginModel = ShopLoginModel.formJson(value.data);
       print(loginModel.status);
       emit(ShopLoginSuccessState(loginModel));
@@ -53,6 +56,49 @@ class ShopLoginCubit extends Cubit<ShopLoginStates> {
         ShopLoginErrorState(error.toString()),
       );
     });
+
+
+
+   */
+  }
+
+  Function navigateToNextScreen(BuildContext context, Widget screen) {
+    // Perform navigation here
+    return () => Navigator.pushNamed(
+        context,'register');
+  }
+
+  void userRegister({
+    required String email,
+    required String password,
+  }) {
+    emit(ShopLoginLoadingState());
+
+    FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password)
+        .then((value) => emit(ShopRegSuccessState()))
+        .catchError((error) {
+      ShopRegErrorState(error);
+    });
+
+    // reg using default API
+    /*
+    DioHelper.postData(
+      url: LOGIN,
+      data: {'email': email, 'password': password},
+    ).then((value) {
+
+      loginModel = ShopLoginModel.formJson(value.data);
+      print(loginModel.status);
+      emit(ShopLoginSuccessState(loginModel));
+    }).catchError((error) {
+      print(error);
+      emit(
+        ShopLoginErrorState(error.toString()),
+      );
+    });
+
+    */
   }
 
   IconData suffix = Icons.visibility_outlined;

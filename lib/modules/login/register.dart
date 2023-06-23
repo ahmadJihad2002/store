@@ -2,21 +2,20 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hash/modules/home/home.dart';
-import 'package:hash/modules/login/register.dart';
 import 'package:hash/shared/components/components.dart';
 import 'package:hash/shared/cubit/shop_login_cubit/cubit.dart';
 import 'package:hash/shared/cubit/shop_login_cubit/states.dart';
 import 'package:hash/shared/network/local/cache_helper.dart';
 
-class Login extends StatelessWidget {
-  Login({Key? key}) : super(key: key);
+class Register extends StatelessWidget {
+  Register({Key? key}) : super(key: key);
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController name = TextEditingController();
+    TextEditingController name = TextEditingController();
 
   TextEditingController password = TextEditingController();
 
-  TextEditingController activationCode = TextEditingController();
+  TextEditingController number = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +28,7 @@ class Login extends StatelessWidget {
               state: ToastStates.success,
             );
             CacheHelper.saveData(
-                    key: 'token', value: state.loginModel.data?.token)
+                key: 'token', value: state.loginModel.data?.token)
                 .then((value) {
               Navigator.push(
                 context,
@@ -48,6 +47,7 @@ class Login extends StatelessWidget {
       },
       builder: (BuildContext context, state) {
         return Scaffold(
+          appBar: AppBar(),
           body: Center(
             child: SingleChildScrollView(
               child: Padding(
@@ -66,7 +66,7 @@ class Login extends StatelessWidget {
                             fontSize: 30),
                       ),
                       const Text(
-                        " قم بتسجيل الدخول لتصفح المنتجات ",
+                        " قم بتسجيل الدخول للشراء بالجملة ",
                         style: TextStyle(
                             fontWeight: FontWeight.w900,
                             color: Colors.grey,
@@ -104,17 +104,17 @@ class Login extends StatelessWidget {
                       const SizedBox(
                         height: 15,
                       ),
-                      // defaultFormField(
-                      //   validate: (value) {
-                      //     if (value.isEmpty) {
-                      //       return "قم بإدخال الاسم بالأول";
-                      //     }
-                      //   },
-                      //   icon: Icons.security,
-                      //   label: 'activation code',
-                      //   controller: activationCode,
-                      //   inputType: TextInputType.visiblePassword,
-                      // ),
+                      defaultFormField(
+                        validate: (value) {
+                          if (value.isEmpty) {
+                            return "قم بإدخال الاسم بالأول";
+                          }
+                        },
+                        icon: Icons.security,
+                        label: 'number',
+                        controller: number,
+                        inputType: TextInputType.visiblePassword,
+                      ),
                       const SizedBox(
                         height: 20,
                       ),
@@ -129,35 +129,14 @@ class Login extends StatelessWidget {
                                       password: password.text);
                                 }
                               },
-                              text: "text");
+                              text: "انشاء حساب");
                         },
                         fallback: (BuildContext context) {
-                          return const Center(
-                              child: CircularProgressIndicator());
+                          return const Center(child: CircularProgressIndicator());
                         },
                       ),
                       const SizedBox(height: 15),
-                      Row(
-                        textDirection: TextDirection.rtl,
-                        children: [
-                          const Text(
-                            " ليس لديك مفتاح تفعيل؟",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w900,
-                                color: Colors.grey,
-                                fontSize: 10),
-                          ),
-                          defaultTextButton(
-                            controller: activationCode,
-                            text: " الحصول على كود التفعيل",
-                            function:
 
-                            ShopLoginCubit.get(context).navigateToNextScreen(context,Register())
-
-
-                          )
-                        ],
-                      )
                     ],
                   ),
                 ),
